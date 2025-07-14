@@ -58,9 +58,9 @@ python tools/adjtsv2csrbin.py input.tsv --output graph.bin --header 1
 
 Features:
 
-Skips header line (if specified).
-Ignores edge weights (only node pairs are used).
-Outputs node_num, edge_num, row_ptr[], col_idx[] in binary.
+- Skips header line (if specified).
+- Ignores edge weights (only node pairs are used).
+- Outputs node_num, edge_num, row_ptr[], col_idx[] in binary.
 
 ## 📊 Profiling & Visualization Tools
 
@@ -74,9 +74,8 @@ python tools/analyze_csr_graph.py input/graph.bin
 
 Outputs:
 
-Number of nodes and edges.
-Degree statistics (avg/max/min).
-Histogram saved as degree_histogram.png.
+- Number of nodes and edges.
+- Degree statistics (avg/max/min).
 
 ### python_tool/show_cycle.py
 
@@ -86,9 +85,8 @@ Visualize DPU cycle usage and workload distribution:
 python tools/show_cycle.py result.txt
 ```
 
-Left: Max cycle per DPU.
-Right: Root task count per DPU.
-Output: PNG image.
+- Left: Max cycle per DPU.
+- Right: Root task count per DPU.
 
 ### python_tool/show_run_cycle.py
 
@@ -98,6 +96,5 @@ Compare cycle usage before and after optimization:
 python tools/show_run_cycle.py original.txt optimized.txt
 ```
 
-Left: Operation/memory cycle stack bars.
-Right: Root task count.
-Output: Named PNG image (auto-generated)
+- Left: Operation/memory cycle stack bars.
+- Right: Root task count.
