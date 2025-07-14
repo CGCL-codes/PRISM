@@ -29,8 +29,6 @@ PRISM/
 - GNU Make, C compiler (e.g., `gcc`).
 - Python ≥ 3.6 (for analysis scripts).
 
----
-
 ## ⚙️ Build and Run Instructions
 
 To match a pattern within a graph, run the following command:
@@ -98,5 +96,3 @@ python tools/show_run_cycle.py original.txt optimized.txt
 Left: Operation/memory cycle stack bars.
 Right: Root task count.
 Output: Named PNG image (auto-generated)
-
----
