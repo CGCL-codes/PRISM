@@ -4,8 +4,6 @@ PRISM is a scalable subgraph counting framework designed for the UPMEM **Process
 
 The goal of PRISM is to accelerate subgraph counting tasks on large-scale graphs using UPMEM DPUs. It integrates **asynchronous pipelining**, **bitmap-based set intersection**, and other optimizations tailored for near-data processing architecture.
 
----
-
 ## 🚀 Key Features
 
 - Fast triangle counting for large-scale sparse graphs.
@@ -14,19 +12,15 @@ The goal of PRISM is to accelerate subgraph counting tasks on large-scale graphs
 - Lightweight performance profiling and cycle analysis tools.
 - CSR (Compressed Sparse Row) binary input format for fast loading.
 
----
-
 ## 📁 Directory Structure
 
-PRISM/
-├── host/ # Host-side logic (C)
-├── dpu/ # DPU-side programs (C for UPMEM)
-├── python_tool/ # Python scripts for preprocessing and profiling
-├── include/ # Shared headers
-├── makefile # Compilation rules
-└── README.md # Project description
-
----
+PRISM/  
+├── host/ # Host-side logic (C)  
+├── dpu/ # DPU-side programs (C for UPMEM)  
+├── python_tool/ # Python scripts for preprocessing and profiling  
+├── include/ # Shared headers  
+├── makefile # Compilation rules  
+└── README.md # Project description  
 
 ## 🛠 Requirements
 
