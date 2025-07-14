@@ -64,7 +64,8 @@ Outputs node_num, edge_num, row_ptr[], col_idx[] in binary.
 
 ## 📊 Profiling & Visualization Tools
 
-1. python_tool/analyze_csr_graph.py
+### python_tool/analyze_csr_graph.py
+
 Analyze CSR binary and generate graph statistics:
 
 ``` bash
@@ -76,7 +77,9 @@ Outputs:
 Number of nodes and edges.
 Degree statistics (avg/max/min).
 Histogram saved as degree_histogram.png.
-2. python_tool/show_cycle.py
+
+### python_tool/show_cycle.py
+
 Visualize DPU cycle usage and workload distribution:
 
 ``` bash
@@ -86,7 +89,9 @@ python tools/show_cycle.py result.txt
 Left: Max cycle per DPU.
 Right: Root task count per DPU.
 Output: PNG image.
-3. python_tool/show_run_cycle.py
+
+### python_tool/show_run_cycle.py
+
 Compare cycle usage before and after optimization:
 
 ``` bash
