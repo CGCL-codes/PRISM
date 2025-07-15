@@ -1,4 +1,4 @@
-# PRISM: Triangle and Subgraph Counting on PIM Platform
+# PRISM: Practical In-Memory Acceleration for Subgraph Matching at Scale
 
 PRISM is a scalable subgraph counting framework designed for the UPMEM **Processing-In-Memory (PIM)** architecture. It currently supports efficient **triangle counting**, and is extensible to other subgraph patterns.
 
@@ -7,6 +7,7 @@ The goal of PRISM is to accelerate subgraph counting tasks on large-scale graphs
 ## 🚀 Key Features
 
 - Fast triangle counting for large-scale sparse graphs.
+- skew-aware workload distribution strategy for balanced execution across thousands of DPU
 - Asynchronous loader-worker pipeline using WRAM FIFO.
 - Bitmap-based set intersection acceleration on DPUs.
 - Lightweight performance profiling and cycle analysis tools.
@@ -24,10 +25,10 @@ PRISM/
 
 ## 🛠 Requirements
 
-- Linux or WSL environment.
-- UPMEM SDK: **upmem-2023.2.0**.
+- Linux environment.
+- UPMEM SDK: **upmem-v2025.1.0.**.
 - GNU Make, C compiler (e.g., `gcc`).
-- Python ≥ 3.6 (for analysis scripts).
+- Python ≥ 3.8 (for analysis scripts).
 
 ## ⚙️ Build and Run Instructions
 
@@ -41,7 +42,7 @@ GRAPH=<graph_name> PATTERN=<pattern_name> make test
 Example:
 
 ``` bash
-make GRAPH=AM0505 PATTERN=CLIQUE3
+GRAPH=AM0312 PATTERN=CLIQUE3 make test
 ```
 
 The available values for GRAPH and PATTERN are defined in common.h. To add new graphs or patterns, modify common.h and recompile.
@@ -53,14 +54,24 @@ PRISM accepts input graphs in binary CSR (Compressed Sparse Row) format.
 To convert Edge List to CSR Binary, use python_tool/adjtsv2csrbin.py to convert TSV/TXT edge lists into binary CSR. Run the following command:
 
 ``` bash
-python tools/adjtsv2csrbin.py input.tsv --output graph.bin --header 1
+python  python_tool/adjtsv2csrbin.py input.tsv --output graph.bin --header 1
 ```
 
 Features:
 
 - Skips header line (if specified).
 - Ignores edge weights (only node pairs are used).
-- Outputs node_num, edge_num, row_ptr[], col_idx[] in binary.
+- Outputs node_num(4bytes), edge_num(4bytes), row_ptr[](node_num*4bytes), col_idx[](edge_num*4bytes) in binary.
+
+Example:
+
+```bash
+mkdir -p ./data 
+wget https://graphchallenge.s3.amazonaws.com/snap/amazon0312/amazon0312_adj.tsv 
+python3 python_tool/adjtsv2csrbin.py amazon0312_adj.tsv
+mv amazon0312_adj.bin ./data
+GRAPH=AM0312 PATTERN=CLIQUE3 make test
+```
 
 ## 📊 Profiling & Visualization Tools
 
@@ -69,7 +80,7 @@ Features:
 Analyze CSR binary and generate graph statistics:
 
 ``` bash
-python tools/analyze_csr_graph.py input/graph.bin
+python3 python_tool/analyze_csr_graph.py input/graph.bin
 ```
 
 Outputs:
@@ -82,19 +93,8 @@ Outputs:
 Visualize DPU cycle usage and workload distribution:
 
 ``` bash
-python tools/show_cycle.py result.txt
+python3 python_tool/show_cycle.py result.txt
 ```
 
 - Left: Max cycle per DPU.
 - Right: Root task count per DPU.
-
-### python_tool/show_run_cycle.py
-
-Compare cycle usage before and after optimization:
-
-``` bash
-python tools/show_run_cycle.py original.txt optimized.txt
-```
-
-- Left: Operation/memory cycle stack bars.
-- Right: Root task count.
