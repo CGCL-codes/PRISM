@@ -101,37 +101,37 @@ All configuration entries are defined in `include/common.h`.
 1. Place your input graph (in CSR binary format) into the `./data/` directory.
 2. Add a macro definition in `include/common.h`:
 
-    ```c
-    #if defined(AM0312)
-    #define DATA_NAME "amazon0312_adj"
-    #define N (1<<20)
-    #define M (1<<23)
-    #endif
-    ```
+```c
+#if defined(AM0312)
+#define DATA_NAME "amazon0312_adj"
+#define N (1<<20)
+#define M (1<<23)
+#endif
+```
 
 3. Build and test:
 
-    ```bash
-    GRAPH=AM0312 PATTERN=CLIQUE3 make test
-    ```
+```bash
+GRAPH=AM0312 PATTERN=CLIQUE3 make test
+```
 
 ### ➕ Adding Custom Patterns
 
 1. Define a new macro for your pattern kernel in include/common.h
 
-    ```c
-    #elif defined(TELE5)
-    #define KERNEL_FUNC tele5
-    #define PATTERN_NAME "tele5"
-    #endif
-    ```
+```c
+#elif defined(TELE5)
+#define KERNEL_FUNC tele5
+#define PATTERN_NAME "tele5"
+#endif
+```
 
 2. Implement the kernel function in dpu/ directory (e.g., in TELE5.c or new source file).
 3. Build and run:
 
-    ```bash
-    GRAPH=AM0312 PATTERN=TELE5 make test
-    ```
+```bash
+GRAPH=AM0312 PATTERN=TELE5 make test
+```
 
 ---
 
@@ -191,3 +191,11 @@ python3 python_tool/show_cycle.py result.txt
 - Right plot: Task count per DPU
 
 ---
+
+## 🙏 Acknowledgments
+
+We gratefully acknowledge the foundational contributions of **PimPam** [SIGMOD'24], which inspired and informed much of this work.  
+We thank the authors for advancing the state of graph pattern mining on real Processing-in-Memory hardware and for generously releasing their implementation, which has been invaluable to our research.
+
+**Reference:**  
+Shuangyu Cai, Boyu Tian, Huanchen Zhang, and Mingyu Gao. *PimPam: Efficient Graph Pattern Matching on Real Processing-in-Memory Hardware.* In *Proceedings of the ACM on Management of Data (SIGMOD '24)*, Volume 2, Issue 3, Article 161, Pages 1–25.
