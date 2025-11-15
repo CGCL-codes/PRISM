@@ -228,8 +228,6 @@ extern node_t intersect_seq_buf_thresh_withcbuf(node_t (*buf)[BUF_SIZE], node_t 
     return ans;
 }
 
-
-// 异步模式：WRAM 中两个已加载数组进行交集计算
 extern node_t intersect_from_buf(node_t *a, uint32_t a_size, node_t *b, uint32_t b_size) {
     node_t ans = 0;
     uint32_t i = 0, j = 0;

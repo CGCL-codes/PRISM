@@ -1,33 +1,33 @@
-// fifo.h - FIFO + WRAM缓冲池结构设计，支持异步Loader/Worker模式
+// fifo.h - FIFO + WRAM buffer pool design, supporting asynchronous Loader/Worker mode
 #ifndef FIFO_H
 #define FIFO_H
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <attributes.h> // for __mram_ptr
-#include "common.h"     // node_t 等基本定义
+#include "common.h"     // basic types like node_t
 #include <mutex.h>
 #include <sem.h>
 #include <stddef.h>
 
 
-#define WRAM_FIFO_CAPACITY 64 // Job缓冲上限，WRAM容量限制
+#define WRAM_FIFO_CAPACITY 64 // Maximum number of jobs (limited by WRAM size)
 #define WRAM_MAX_ROOT_BUF_SLOT 16
 #define WRAM_MAX_SECOND_BUF_SLOT 32
 #define WRAM_BUF_SIZE 32
 
 
-// ---------------- Root WRAM缓冲区元信息 ----------------
+// ---------------- Root WRAM buffer metadata ----------------
 typedef struct
 {
     node_t root_id;
-    node_t *ptr; // 指向 WRAM 实际缓冲
+    node_t *ptr; // Pointer to actual WRAM buffer
     uint32_t size;
     uint32_t ref_count;
     bool in_use;
 } a_buf_entry_t;
 
-// ---------------- Second WRAM缓冲区元信息 ----------------
+// ---------------- Secondary WRAM buffer metadata ----------------
 typedef struct
 {
     node_t second_id;
@@ -36,7 +36,7 @@ typedef struct
     bool in_use;
 } b_buf_entry_t;
 
-// ---------------- Job 结构 ----------------
+// ---------------- Job structure ----------------
 typedef struct {
     node_t root_id;
     uint8_t a_index;
@@ -47,7 +47,8 @@ typedef struct {
     uint32_t b_size;
     node_t threshold;
 } job_t;
-// ---------------- FIFO 定义 ----------------
+
+// ---------------- FIFO definition ----------------
 typedef struct
 {
     job_t buffer[WRAM_FIFO_CAPACITY];
@@ -141,14 +142,14 @@ static inline int allocate_a_buf(node_t size)
         }
     }
     mutex_unlock(a_buf_lock);
-    return -1; // 理论上不会发生
+    return -1; // Should not happen in theory
 }
 
 static inline void release_a_buf(int index)
 {
-    mutex_lock(a_buf_lock); // <<<< 加锁
+    mutex_lock(a_buf_lock); // <<<< lock
     a_buf_table[index].in_use = false;
-    mutex_unlock(a_buf_lock); // <<<< 解锁
+    mutex_unlock(a_buf_lock); // <<<< unlock
     sem_give(&a_buf_sem);
 }
 
@@ -165,7 +166,7 @@ static inline int allocate_b_buf(node_t size)
         }
     }
     mutex_unlock(b_buf_lock);
-    return -1; // 理论上不会发生
+    return -1; // Should not happen in theory
 }
 
 static inline void release_b_buf(int index)

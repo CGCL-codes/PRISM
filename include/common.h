@@ -15,7 +15,7 @@
 #define BITMAP
 #endif
 
-#define DATA_DIR "./data/"
+#define DATA_DIR "../../origin/Prism/data/"
 #if defined(SELF)
 #define DATA_NAME "self-defined"
 #define N (1<<5)
@@ -311,6 +311,12 @@
 #elif defined(TELE5)
 #define KERNEL_FUNC tele5
 #define PATTERN_NAME "tele5"
+#elif defined(CROSS5)
+#define KERNEL_FUNC cross5
+#define PATTERN_NAME "cross5"
+#elif defined(CSP5)
+#define KERNEL_FUNC csp5
+#define PATTERN_NAME "csp5"
 #else
 #warning "No kernel function selected, fall back to clique2."
 #define KERNEL_FUNC clique2
@@ -336,7 +342,7 @@
 #define BITMAP_ROW 8192
 #define BITMAP_COL 128
 
-#define V_NR_DPUS 2560
+//#define V_NR_DPUS 2560  //option for virtual dpu 
 #ifdef V_NR_DPUS
 #define EF_NR_DPUS V_NR_DPUS
 #else

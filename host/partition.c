@@ -215,11 +215,11 @@ static void verify_bitmap_intersection(uint64_t op_bitmap[BITMAP_ROW][BITMAP_COL
 }
 
 static void init_op_bitmap(uint64_t op_bitmap[BITMAP_ROW][BITMAP_COL], node_t bm_nums, const Graph*g) {
-    // 清空整张 bitmap
+ 
     memset(op_bitmap, 0, sizeof(uint64_t) * BITMAP_ROW * BITMAP_COL);
 
     for (node_t i = 0; i < bm_nums; i++) {
-        // 标记它的邻居节点
+ 
         for (edge_ptr e = g->row_ptr[i]; e < g->row_ptr[i + 1]; e++) {
             node_t neighbor = g->col_idx[e];
             if(neighbor>=BM_NUMS)break;
@@ -245,7 +245,7 @@ static node_t count_high_degree_nodes(Graph *g, node_t threshold) {
 
     count &= ~63;
 
-    // 限制最大值为8192
+    // limit to 8192
     if (count > 8192) {
         count = 8192;
     }
@@ -308,7 +308,7 @@ static void data_renumber() {
     Graph *tmp_g = malloc(sizeof(Graph));
     memcpy(tmp_g, global_g, sizeof(Graph));
 
-    // === 1. 统计出度与入度（邻接表遍历）===
+
     for (node_t i = 0; i < global_g->n; i++) {
         out_deg[i] = tmp_g->row_ptr[i + 1] - tmp_g->row_ptr[i];
         for (edge_ptr j = tmp_g->row_ptr[i]; j < tmp_g->row_ptr[i + 1]; j++) {
@@ -317,7 +317,6 @@ static void data_renumber() {
         }
     }
 
-    // === 2. 去除度数小于等于 2 的点（无向图中相当于一条边或孤点） ===
     for (node_t i = 0; i < global_g->n; i++) {
         if (out_deg[i] + in_deg[i] > 2) {
             valid[i] = true;
@@ -325,15 +324,12 @@ static void data_renumber() {
         }
     }
 
-    // === 3. 排序（出度降序） ===
     qsort(rank, new_n, sizeof(node_t), deg_cmp);
 
-    // === 4. 构建 renumbered 映射 ===
     for (node_t i = 0; i < new_n; i++) {
         renumbered[rank[i]] = i;
     }
 
-    // === 5. 构造新的 CSR 图 ===
     edge_ptr cur = 0;
     for (node_t i = 0; i < new_n; i++) {
         node_t node = rank[i];
@@ -651,15 +647,15 @@ static void*alloc_bitmap(uint32_t num_bits, size_t num_dpus) {
     uint64_t total_words = words_per_dpu * num_dpus;
     uint64_t total_bytes = total_words * sizeof(uint32_t);
 
-    // 转为 GiB，保留两位小数
+
     double total_gib = total_bytes / (1024.0 * 1024 * 1024);
 
     void *bitmap = malloc((size_t)total_bytes);
     if (!bitmap) {
-        printf("❌ bitmap 分配失败！%.2f GiB (%lu 字节)\n", total_gib, total_bytes);
+        printf("❌ bitmap allocate false！%.2f GiB (%lu bytes)\n", total_gib, total_bytes);
         exit(1);
     } else {
-        printf("✅ bitmap 分配成功：%.2f GiB (%lu 字节)\n", total_gib, total_bytes);
+        printf("✅ bitmap allocate success：%.2f GiB (%lu bytes)\n", total_gib, total_bytes);
         return bitmap;
     }
 }
@@ -688,7 +684,7 @@ static void cut_edge()
     }
     new_row_ptr[g->n] = col_offset;
 
-    // 更新原图内容
+
     for (edge_ptr i = 0; i < col_offset; i++) {
         g->col_idx[i] = new_col_idx[i];
     }
