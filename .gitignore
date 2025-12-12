@@ -7,3 +7,5 @@ python_tool/*.tsv
 python_tool/*.txt
 nohup.out
 
+.DS_Store
+.DS_Store?
